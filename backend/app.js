@@ -70,6 +70,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.listen(5001, () => {
-  console.log("Server started!");
+const HOST_IP = "195.22.251.44";
+const PORT = 5001;
+
+app.listen(PORT, HOST_IP, () => {
+  console.log(`Server started on http://${HOST_IP}:${PORT}`);
 });
