@@ -49,7 +49,7 @@ export default function Login({ navigation }) {
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Image
             source={require("../assets/Vector.png")}
-            className="w-2  mr-2"
+            className="w-3 h-6  mr-2"
           />
         </TouchableOpacity>
         <Text

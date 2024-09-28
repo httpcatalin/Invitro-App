@@ -80,7 +80,7 @@ export default function SignUp({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require("../assets/Vector.png")}
-            className="w-2  mr-2"
+            className="w-3 h-6  mr-2"
           />
         </TouchableOpacity>
       </View>

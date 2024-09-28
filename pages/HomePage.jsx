@@ -37,7 +37,7 @@ export default function HomePage({ navigation }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Image source={require("../assets/Vector.png")} style={styles.icon} />
+          <Image source={require("../assets/Vector.png")} className="w-3 h-6" />
         </TouchableOpacity>
         <Text style={[styles.title, { fontFamily: "Poppins_600SemiBold" }]}>
           Doctors

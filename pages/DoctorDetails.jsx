@@ -3,12 +3,11 @@ import {
   Text,
   View,
   StyleSheet,
-  Picker,
   ActivityIndicator,
   TouchableOpacity,
   Image,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import {
   useFonts,
   Poppins_300Light,
@@ -19,6 +18,7 @@ import {
 
 export default function DoctorDetails() {
   const route = useRoute();
+  const navigation = useNavigation();
   const { doctorName, doctorSpeciality } = route.params;
 
   const [hospitals, setHospitals] = useState([]);
@@ -65,15 +65,25 @@ export default function DoctorDetails() {
 
   return (
     <View style={styles.container}>
-      <View style={ }>
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <Image source={require("../assets/Vector.png")} style={styles.icon} />
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("HomePage")}
+          style={styles.backButton}
+        >
+          <Image source={require("../assets/Vector.png")} className="w-3 h-6" />
         </TouchableOpacity>
         <Text style={[styles.title, { fontFamily: "Poppins_600SemiBold" }]}>
-          Doctors
+          Appointment's details
         </Text>
-        <View style={styles.placeholder}></View>
       </View>
+
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/icons8-doctor-50.png")}
+          style={styles.doctorImage}
+        />
+      </View>
+
       <Text style={[styles.doctorName, { fontFamily: "Poppins_600SemiBold" }]}>
         {doctorName}
       </Text>
@@ -89,13 +99,43 @@ export default function DoctorDetails() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    justifyContent: "center",
-    backgroundColor: "#fff",
+    padding: 12,
+    paddingHorizontal: 30,
+    backgroundColor: "#f7f7f7",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "center", // Center the title
+    alignItems: "center",
+    marginTop: 40,
+    width: "100%",
+    position: "relative",
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    width: "12px",
+    height: "24px",
+  },
+
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  imageContainer: {
+    alignItems: "center",
+    marginVertical: 20,
+  },
+  doctorImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#407CE2",
   },
   doctorName: {
     fontSize: 24,
-    marginBottom: 20,
+    marginBottom: 10,
     textAlign: "center",
   },
   doctorSpeciality: {
