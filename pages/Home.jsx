@@ -22,7 +22,7 @@ export default function Home({ navigation }) {
             className="text-4xl mb-2 text-[#223A6A] mt-3"
             style={{ fontFamily: "Poppins_500Medium" }}
           >
-            I-Health
+            e-Health
           </Text>
           <Text className="font-semibold text-2xl  mt-3 text-[#221F1F]">
             Let’s get started!

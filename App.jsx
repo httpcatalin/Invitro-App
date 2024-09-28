@@ -5,6 +5,7 @@ import { useFonts } from "expo-font";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import DoctorDetails from "./pages/DoctorDetails";
 import {
   Poppins_400Regular,
   Poppins_500Medium,
@@ -12,6 +13,7 @@ import {
   Poppins_300Light,
 } from "@expo-google-fonts/poppins";
 import HomePage from "./pages/HomePage";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -43,6 +45,11 @@ export default function App() {
         <Stack.Screen
           name="HomePage"
           component={HomePage}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DoctorDetails"
+          component={DoctorDetails}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

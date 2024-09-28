@@ -6,6 +6,9 @@ const bcrypt = require("bcryptjs");
 const mongoUrl =
   "mongodb+srv://admin:admin@server.cvnicxe.mongodb.net/GIGAHACK?retryWrites=true&w=majority&appName=Server";
 
+const cors = require("cors");
+app.use(cors());
+
 app.use(bodyParser.json());
 mongoose
   .connect(mongoUrl)
@@ -70,9 +73,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-const HOST_IP = "195.22.251.44";
-const PORT = 5001;
-
-app.listen(PORT, HOST_IP, () => {
-  console.log(`Server started on http://${HOST_IP}:${PORT}`);
+app.listen(5001, () => {
+  console.log("Server started!");
 });

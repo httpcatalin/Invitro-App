@@ -10,6 +10,7 @@ import {
 
 import { useState } from "react";
 import axios from "axios";
+
 import HomePage from "./HomePage";
 
 export default function Login({ navigation }) {
@@ -31,17 +32,19 @@ export default function Login({ navigation }) {
         email: email,
         password: password,
       });
-      Alert.alert("Success", response.data.data);
       navigation.navigate("HomePage");
     } catch (error) {
-      if (error.response && error.response.data)
+      console.error(error);
+      if (error.response && error.response.data) {
         setErrors({ server: error.response.data.data });
-      else setErrors({ server: "Something went wrong. Please try again." });
+      } else {
+        setErrors({ server: "Something went wrong. Please try again." });
+      }
     }
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-white px-6">
+    <View className="flex-1 justify-center items-center bg-white px-6 space-y-10">
       <View className="flex flex-row justify-between items-center mb-10 w-full">
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Image
@@ -110,7 +113,12 @@ export default function Login({ navigation }) {
         onPress={handleLogin}
         className="bg-[#407CE2] mt-8  w-64 h-14  rounded-full justify-center items-center"
       >
-        <Text className="text-white text-lg ">Sign In</Text>
+        <Text
+          className="text-white text-lg "
+          style={{ fontFamily: "Poppins_400Regular" }}
+        >
+          Sign In
+        </Text>
       </TouchableOpacity>
 
       <View className="flex flex-row mt-5 space-x-2 items-center">

@@ -1,11 +1,20 @@
 import {
   Text,
   View,
-  Button,
   Image,
-  TextInput,
   TouchableOpacity,
+  TextInput,
+  Alert,
 } from "react-native";
+import {
+  useFonts,
+  Poppins_300Light,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+} from "@expo-google-fonts/poppins";
+
 import { useState } from "react";
 import axios from "axios";
 
@@ -14,112 +23,256 @@ export default function SignUp({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-
-  const validateEmail = (email) => {
-    const re =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
-    return re.test(String(email).toLowerCase());
-  };
-
-  const handleSignUp = async () => {
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+  const [isAgreed, setIsAgreed] = useState(false);
+  const [fontsLoaded] = useFonts({
+    Poppins_300Light,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
+  });
+  const handleSignUp = () => {
     setErrors({});
-    let formErrors = {};
 
-    if (name.trim().length < 2) {
-      formErrors.name = "Full name must be at least 2 characters.";
-    }
-
-    if (!validateEmail(email)) {
-      formErrors.email = "Please enter a valid email address.";
-    }
-
-    if (password.length < 6) {
-      formErrors.password = "Password must be at least 6 characters.";
-    }
-
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
+    if (!isAgreed) {
+      Alert.alert(
+        "Error",
+        "You must agree to the Terms of Service and Privacy Policy."
+      );
       return;
     }
 
-    const userData = {
-      name: name,
-      email: email,
-      password: password,
-    };
-
-    try {
-      const response = await axios.post(
-        "http://172.31.84.119:5001/register",
-        userData
-      );
-      if (response.data.status === "ok") {
-        navigation.navigate("Login");
-      } else {
-        setErrors({ server: response.data.data });
-      }
-    } catch (error) {
-      setErrors({ server: "Something went wrong. Please try again." });
+    if (!name || !email || !password) {
+      setErrors({ server: "All fields are required." });
+      return;
     }
+
+    axios
+      .post("http://172.31.84.119:5001/register", {
+        name: name,
+        email: email,
+        password: password,
+      })
+      .then(() => {
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          setErrors({ server: error.response.data.message });
+        } else {
+          setErrors({ server: "Something went wrong. Please try again." });
+        }
+      });
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-white">
-      <View className="flex flex-col items-center w-full px-4">
-        <View className="flex flex-row items-center mb-16">
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        paddingHorizontal: 24,
+      }}
+    >
+      <View style={{ position: "absolute", top: 100, left: 16 }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require("../assets/Vector.png")}
+            className="w-2  mr-2"
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={{ position: "absolute", top: 100 }}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 24,
+            fontFamily: "Poppins_600SemiBold",
+          }}
+        >
+          Sign Up
+        </Text>
+      </View>
+
+      <View style={{ width: "100%", marginTop: 160, marginBottom: 12 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            borderRadius: 8,
+            paddingHorizontal: 12,
+            marginBottom: 30,
+            height: 72,
+            backgroundColor: "#f2f2f2",
+          }}
+        >
+          <Image
+            source={require("../assets/User.png")}
+            style={{ width: 24, height: 24, marginRight: 12 }}
+          />
+          <TextInput
+            placeholder="Enter your name"
+            value={name}
+            onChangeText={setName}
+            style={{ fontFamily: "Poppins_500Medium" }}
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            borderRadius: 8,
+            paddingHorizontal: 12,
+            marginBottom: 30,
+            height: 72,
+            backgroundColor: "#f2f2f2",
+          }}
+        >
+          <Image
+            source={require("../assets/User-Outline.png")}
+            style={{ width: 24, height: 24, marginRight: 12 }}
+          />
+          <TextInput
+            placeholder="Enter your email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            style={{ fontFamily: "Poppins_500Medium" }}
+          />
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            borderRadius: 8,
+            paddingHorizontal: 12,
+            marginBottom: 12,
+            height: 72,
+            backgroundColor: "#f2f2f2",
+          }}
+        >
+          <Image
+            source={require("../assets/Password.png")}
+            style={{ width: 24, height: 24, marginRight: 12 }}
+          />
+          <TextInput
+            placeholder="Enter your password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={isPasswordHidden}
+            style={{ flex: 1, fontFamily: "Poppins_500Medium" }}
+          />
+          <TouchableOpacity
+            onPress={() => setIsPasswordHidden(!isPasswordHidden)}
+          >
             <Image
-              source={require("../assets/Chevron Left.png")}
-              className="w-4 mr-2"
+              source={
+                isPasswordHidden
+                  ? require("../assets/grey.png")
+                  : require("../assets/black.png")
+              }
+              style={{ width: 24, height: 24 }}
             />
           </TouchableOpacity>
-          <Text className="font-bold text-xl">Sign Up</Text>
         </View>
-
-        <TextInput
-          placeholder="Name"
-          value={name}
-          onChangeText={setName}
-          className="w-full h-12 border border-gray-300 rounded-md px-3 mb-1"
-        />
-        {errors.name && (
-          <Text className="text-red-500 mb-2">{errors.name}</Text>
-        )}
-
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          className="w-full h-12 border border-gray-300 rounded-md px-3 mb-1"
-        />
-        {errors.email && (
-          <Text className="text-red-500 mb-2">{errors.email}</Text>
-        )}
-
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          className="w-full h-12 border border-gray-300 rounded-md px-3 mb-1"
-        />
-        {errors.password && (
-          <Text className="text-red-500 mb-2">{errors.password}</Text>
-        )}
 
         {errors.server && (
-          <Text className="text-red-500 mb-2">{errors.server}</Text>
+          <Text style={{ color: "red", marginBottom: 12 }}>
+            {errors.server}
+          </Text>
         )}
+      </View>
 
-        <Button title="Sign Up" onPress={handleSignUp} color="#3B82F6" />
+      <View
+        style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}
+      >
+        <TouchableOpacity onPress={() => setIsAgreed(!isAgreed)}>
+          <Image
+            source={
+              isAgreed
+                ? require("../assets/checkmark_color.png")
+                : require("../assets/checkbox.png")
+            }
+            className="w-5 h-5"
+          />
+        </TouchableOpacity>
+        <Text
+          className="text-[11px]"
+          style={{ marginLeft: 8, fontFamily: "Poppins_500Medium" }}
+        >
+          I agree to the healthcare{" "}
+          <Text
+            className="text-[11px]"
+            style={{ color: "#407CE2", marginRight: 10 }}
+          >
+            Terms of Service
+          </Text>
+          and
+          <Text
+            className="text-[11px]"
+            style={{ color: "#407CE2", marginLeft: 8 }}
+          >
+            Privacy Policy
+          </Text>
+        </Text>
+      </View>
 
-        <View className="flex flex-row mt-5">
-          <Text>Have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text className="text-blue-500 font-bold">Login</Text>
-          </TouchableOpacity>
-        </View>
+      <TouchableOpacity
+        onPress={handleSignUp}
+        className="bg-[#407CE2] mt-8  w-64 h-14  rounded-full justify-center items-center"
+        style={{
+          backgroundColor: "#407CE2",
+          marginTop: 140,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text
+          style={{
+            color: "white",
+            fontSize: 20,
+            fontFamily: "Poppins_400Regular",
+          }}
+        >
+          Sign Up
+        </Text>
+      </TouchableOpacity>
+
+      <View
+        style={{ flexDirection: "row", marginTop: 20, alignItems: "center" }}
+      >
+        <Text
+          style={{
+            letterSpacing: 1,
+            fontSize: 14,
+            fontFamily: "Poppins_400Regular",
+          }}
+        >
+          Already have an account?
+        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <Text
+            style={{
+              color: "#407CE2",
+              fontSize: 14,
+              marginLeft: 4,
+              fontFamily: "Poppins_700Bold",
+            }}
+          >
+            Sign in
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
