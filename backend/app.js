@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const axios = require("axios");
+const https = require('https');
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
@@ -72,6 +74,20 @@ app.post("/login", async (req, res) => {
     res.send({ status: "error", data: error.message });
   }
 });
+
+// Example API endpoint
+app.get("/doctors", async (req, res) => {
+  try {
+    const httpsAgent = new https.Agent({
+      rejectUnauthorized: false
+    });
+
+    const doctors = await axios.get("https://demo.docdream.com:8001/api/employees?includeNonActive=false", {httpsAgent})
+    res.send(doctors.data);
+  } catch (e) {
+    res.send({message: e.message});
+  }
+})
 
 app.listen(5001, () => {
   console.log("Server started!");
