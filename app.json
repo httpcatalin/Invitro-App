@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "Invitro-app",
-    "slug": "Invitro-app",
+    "name": "Invitro-App",
+    "slug": "Invitro-App",
     "version": "1.0.0",
+      "scheme": "Invitro-App",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,12 +17,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": ""
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
