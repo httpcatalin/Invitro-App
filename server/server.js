@@ -1,22 +1,9 @@
-require("dotenv").config({ path: "../.env.local" });
-
+require("dotenv").config({ path: "./.env.local" });
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-
-
-const mongoUrl = process.env.MONGO_URI;
-
-
-mongoose
-  .connect(mongoUrl)
-  .then(() => {
-    console.log("Database connected!");
-  })
-  .catch((e) => {
-    console.log(e);
-  });
+const dbConnection = require("./config/dbConnection");
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
@@ -75,16 +62,20 @@ app.post("/login", async (req, res) => {
 app.get("/doctors", async (req, res) => {
   try {
     const httpsAgent = new https.Agent({
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     });
 
-    const doctors = await axios.get("https://demo.docdream.com:8001/api/employees?includeNonActive=false", {httpsAgent})
+    const doctors = await axios.get(
+      "https://demo.docdream.com:8001/api/employees?includeNonActive=false",
+      { httpsAgent }
+    );
     res.send(doctors.data);
   } catch (e) {
-    res.send({message: e.message});
+    res.send({ message: e.message });
   }
 });
 
-app.listen(5001, () => {
-  console.log("Server started!");
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server started on port ${process.env.PORT || 3000}!`);
+  dbConnection();
 });
