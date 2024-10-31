@@ -18,8 +18,12 @@ Key functionalities include user onboarding, intuitive navigation, and seamless 
 - **Material Design Components:** Utilizes React Native Paper for a visually appealing UI.
 
 
-<img src="./assets/images/screenshot_onboard.png" alt="On Boarding Page 1" width="250" />
-<img src="./assets/images/screenshot_onboard2.png"" alt="On Boarding Page 2" width="250" />
+
+<div style="text-align: center;">
+    <img src="./assets/images/screenshot_onboard.png" alt="On Boarding Page 1" width="250" />
+    <img src="./assets/images/screenshot_onboard2.png" alt="On Boarding Page 2" width="250" />
+</div>
+
 
 
 ## Technologies Used
