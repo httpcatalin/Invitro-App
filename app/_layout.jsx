@@ -49,6 +49,23 @@ const RootLayout = () => {
           },
         }}
       />
+      <Stack.Screen name="(auth)/register"  options={{
+          headerTitle: "",
+          headerLeft: () => (
+            <TouchableOpacity className="" onPress={() => navigation.goBack()}>
+              <Image
+                source={require("../assets/images/Vector.png")}
+                className="w-7 h-7"
+                resizeMode="stretch"
+              />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: "#ffffff",
+            borderBottomColor: "#EDEEF1",
+            borderBottomWidth: 1,
+          },
+        }} />
     </Stack>
   );
 };

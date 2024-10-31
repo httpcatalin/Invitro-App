@@ -24,7 +24,7 @@ const SignUp = () => {
             textColor="white"
             className="bg-[#254EDB] rounded-lg h-12 flex items-center justify-center text-xl font-manbold"
           >
-            <Text className="text-base font-manbold">Continue with email</Text>
+            <Link href="/register" className="text-base font-manbold">Continue with email</Link>
           </Button>
 
           <Button
@@ -38,11 +38,11 @@ const SignUp = () => {
           </Button>
         </View>
 
-        <View className="flex items-center justify-center mt-10">
+        <View className="flex items-center justify-center mt-12 ">
           <Text className="log text-base text-[#5C606A] font-manmed">
-            Already have an account?{" "}
+            Already have an account?{" "} 
             <Link className="text-[#254EDB]" href="/sign-in">
-              Sign In
+                Sign In
             </Link>
           </Text>
         </View>
