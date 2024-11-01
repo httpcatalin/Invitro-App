@@ -24,25 +24,35 @@ const SignUp = () => {
             textColor="white"
             className="bg-[#254EDB] rounded-lg h-12 flex items-center justify-center text-xl font-manbold"
           >
-            <Link href="/register" className="text-base font-manbold">Continue with email</Link>
+            <Link href="/register" className="text-base font-manbold">
+              Continue with email
+            </Link>
           </Button>
 
           <Button
             mode="outlined"
             textColor="#1C3BA4"
             theme={{ colors: { outline: "#C0C4CB" } }}
-            className="bg-white rounded-lg h-12 flex items-center justify-center"
+            className="bg-white rounded-lg h-12 flex flex-row items-center justify-center"
           >
-            <Icon name="google" size={17} style={{ marginRight: 8 }} />
-            <Text className="text-base font-manbold">Sign In with Google</Text>
+            <View className="flex flex-row items-center justify-center">
+              <Image
+                source={require("../../assets/images/google.png")}
+                resizeMode="contain"
+                className="w-4 mr-2 flex items-center justify-center"
+              />
+              <Text className="text-base font-manbold mr-1 text-center text-[#2349CC]">
+                Sign In with Google
+              </Text>
+            </View>
           </Button>
         </View>
 
         <View className="flex items-center justify-center mt-12 ">
           <Text className="log text-base text-[#5C606A] font-manmed">
-            Already have an account?{" "} 
+            Already have an account?{" "}
             <Link className="text-[#254EDB]" href="/sign-in">
-                Sign In
+              Sign In
             </Link>
           </Text>
         </View>

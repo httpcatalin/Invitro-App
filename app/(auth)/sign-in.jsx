@@ -1,6 +1,6 @@
-import { View, Text, Animated } from "react-native";
+import { View, Text, Animated, Image } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button } from "react-native-paper";
 import { Link } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -8,14 +8,13 @@ const SignIn = () => {
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const animation = useRef(new Animated.Value(1)).current; 
+  const animation = useRef(new Animated.Value(1)).current;
 
   const isFormFilled = text1 && text2;
 
   useEffect(() => {
-
     Animated.spring(animation, {
-      toValue: isFormFilled ? 1.05 : 1, 
+      toValue: isFormFilled ? 1.05 : 1,
       friction: 1,
       useNativeDriver: true,
     }).start();
@@ -116,10 +115,18 @@ const SignIn = () => {
         mode="outlined"
         textColor="#1C3BA4"
         theme={{ colors: { outline: "#C0C4CB" } }}
-        className="bg-white rounded-lg h-12 flex items-center justify-center"
+        className="bg-white rounded-lg h-12 flex flex-row items-center justify-center"
       >
-        <Icon name="google" size={17} style={{ marginRight: 8 }} />
-        <Text className="text-base font-manbold mr-1">Sign In with Google</Text>
+        <View className="flex flex-row items-center justify-center">
+          <Image
+            source={require("../../assets/images/google.png")}
+            resizeMode="contain"
+            className="w-4 mr-2 flex items-center justify-center"
+          />
+          <Text className="text-base font-manbold mr-1 text-center text-[#2349CC]">
+            Sign In with Google
+          </Text>
+        </View>
       </Button>
       <View className="flex items-center justify-center mt-10 text-base">
         <Text className="text-base text-[#5C606A] font-manmed">

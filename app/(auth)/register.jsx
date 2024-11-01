@@ -69,7 +69,6 @@ const Register = () => {
           <Text className="text-[#254EDB]"> Privacy Policy</Text>
         </Text>
       </View>
-
       </View>
     </View>
   )
