@@ -1,15 +1,16 @@
 import { View, Text, Animated, Image } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { TextInput, Button } from "react-native-paper";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { TouchableOpacity } from "react-native";
 
 const SignIn = () => {
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const animation = useRef(new Animated.Value(1)).current;
-
+  const router = useRouter();
   const isFormFilled = text1 && text2;
 
   useEffect(() => {
@@ -94,9 +95,8 @@ const SignIn = () => {
         }}
         className="buttons"
       >
-        <Button
-          mode="contained"
-          textColor={isFormFilled ? "white" : "#CBCDD0"}
+        <TouchableOpacity
+    onPress={ ()=> (isFormFilled ? router.replace('/') : null)}
           className={`${
             isFormFilled ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
           } rounded-lg h-12 flex items-center justify-center`}
@@ -108,30 +108,27 @@ const SignIn = () => {
           >
             Sign In
           </Text>
-        </Button>
+        </TouchableOpacity>
       </Animated.View>
       <View className="w-full bg-[#EDEEF1] h-0.5 my-5 rounded-xl"></View>
-      <Button
-        mode="outlined"
-        textColor="#1C3BA4"
-        theme={{ colors: { outline: "#C0C4CB" } }}
-        className="bg-white rounded-lg h-12 flex flex-row items-center justify-center"
-      >
-        <View className="flex flex-row items-center justify-center">
-          <Image
-            source={require("../../assets/images/google.png")}
-            resizeMode="contain"
-            className="w-4 mr-2 flex items-center justify-center"
-          />
-          <Text className="text-base font-manbold mr-1 text-center text-[#2349CC]">
-            Sign In with Google
-          </Text>
-        </View>
-      </Button>
+      <TouchableOpacity
+            className="bg-white border border-[#C0C4CB] rounded-lg h-12 flex flex-row items-center justify-center"
+          >
+            <View className="flex flex-row items-center justify-center">
+              <Image
+                source={require("../../assets/images/google.png")}
+                resizeMode="contain"
+                className="w-4 h-4 mr-2 flex items-center justify-center"
+              />
+              <Link href='/google' className="text-base font-manbold mr-1 text-center text-[#2349CC]">
+                Sign In with Google
+              </Link>
+            </View>
+          </TouchableOpacity>
       <View className="flex items-center justify-center mt-10 text-base">
         <Text className="text-base text-[#5C606A] font-manmed">
           Don’t have an account?{" "}
-          <Link className="text-base text-[#254EDB]" href="/sign-in">
+          <Link className="text-base text-[#254EDB]" href="/register">
             Register
           </Link>
         </Text>

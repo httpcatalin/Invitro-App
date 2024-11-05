@@ -3,7 +3,7 @@
     "name": "Invitro-App",
     "slug": "Invitro-App",
     "version": "1.0.0",
-      "scheme": "Invitro-App",
+    "scheme": "Invitro-App",
     "orientation": "portrait",
     "icon": "",
     "userInterfaceStyle": "light",
@@ -25,7 +25,8 @@
       "favicon": ""
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ]
   }
 }

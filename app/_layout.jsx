@@ -1,27 +1,63 @@
-import { View, Text, Image } from "react-native";
 import React, { useEffect, useState } from "react";
-import { SplashScreen, Stack } from "expo-router";
+import { View, Image, TouchableOpacity } from "react-native";
+import {  Stack, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
-import { IconButton } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
+import { Asset } from "expo-asset";
+import Splash from "./splash";
+const preloadAssets = async () => {
+  const imageAssets = [
+    require('../assets/images/doctor.jpg'),
+    require('../assets/images/gloves.jpg'),
+    require('../assets/images/calendar.png'),
+    require('../assets/images/google.png'),
+    require('../assets/images/logo.png'),
+    require('../assets/images/ochi.png'),
+    require('../assets/images/unelta.png'),
+    require('../assets/images/Vector.png'),
+  ].map(image => Asset.fromModule(image).downloadAsync());
 
-SplashScreen.preventAutoHideAsync();
+  await Promise.all(imageAssets);
+};
 
 const RootLayout = () => {
-  const [fontsLoaded, error] = useFonts({
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const [fontsLoaded, fontsError] = useFonts({
     "man-med": require("../assets/fonts/Manrope-Medium.ttf"),
     "man-bold": require("../assets/fonts/Manrope-Bold.ttf"),
   });
 
-  const navigation = useNavigation();
+  const router = useRouter();
 
   useEffect(() => {
-    if (error) throw error;
-    if (fontsLoaded) SplashScreen.hideAsync();
-  }, [fontsLoaded, error]);
+    const loadAssets = async () => {
+      try {
+        await preloadAssets();
+        setAssetsLoaded(true);
+      } catch (error) {
+        console.warn("Asset preloading error:", error);
+      }
+    };
 
-  if (!fontsLoaded) return null;
+    loadAssets();
+    return;
+  }, []);
+
+  useEffect(() => {
+    if (fontsError) {
+      console.error("Font loading error:", fontsError);
+      return; 
+    }
+
+    if (fontsLoaded && assetsLoaded) 
+      router.replace('/onboard');
+  
+  }, [fontsLoaded, assetsLoaded, fontsError, router]);
+
+  if (!fontsLoaded || !assetsLoaded) {
+    return <Splash />;
+  }
+
+  
 
   return (
     <Stack>
@@ -34,11 +70,10 @@ const RootLayout = () => {
         options={{
           headerTitle: "",
           headerLeft: () => (
-            <TouchableOpacity className="" onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => router.replace('/sign-up')}>
               <Image
                 source={require("../assets/images/Vector.png")}
-                className="w-7 h-7"
-                resizeMode="stretch"
+                style={{ width: 19, height: 19 }}
               />
             </TouchableOpacity>
           ),
@@ -49,14 +84,15 @@ const RootLayout = () => {
           },
         }}
       />
-      <Stack.Screen name="(auth)/register"  options={{
+      <Stack.Screen
+        name="(auth)/register"
+        options={{
           headerTitle: "",
           headerLeft: () => (
-            <TouchableOpacity className="" onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => router.replace('/sign-up')}>
               <Image
                 source={require("../assets/images/Vector.png")}
-                className="w-7 h-7"
-                resizeMode="stretch"
+                style={{ width: 19, height: 19 }}
               />
             </TouchableOpacity>
           ),
@@ -65,7 +101,27 @@ const RootLayout = () => {
             borderBottomColor: "#EDEEF1",
             borderBottomWidth: 1,
           },
-        }} />
+        }}
+      />
+            <Stack.Screen
+        name="(auth)/otp"
+        options={{
+          headerTitle: "",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.replace('/register')}>
+              <Image
+                source={require("../assets/images/Vector.png")}
+                style={{ width: 19, height: 19 }}
+              />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: "#ffffff",
+            borderBottomColor: "#EDEEF1",
+            borderBottomWidth: 1,
+          },
+        }}
+      />
     </Stack>
   );
 };
