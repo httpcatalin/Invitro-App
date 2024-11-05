@@ -1,4 +1,4 @@
-import { View, Text, Animated, TouchableOpacity, Image } from "react-native";
+import { View, Text, Animated, TouchableOpacity, Image, Keyboard } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { OtpInput } from "react-native-otp-entry";
@@ -7,7 +7,7 @@ const Otp = () => {
     const [text2, setText] = useState("");
     const [timer, setTimer] = useState(59);
     const [isResendEnabled, setIsResendEnabled] = useState(false);
-    const animation = useRef(new Animated.Value(1)).current; 
+    const animation = useRef(new Animated.Value(1)).current;
     const router = useRouter();
 
     useEffect(() => {
@@ -15,14 +15,14 @@ const Otp = () => {
             setTimer(prevTimer => {
                 if (prevTimer <= 1) {
                     clearInterval(intervalId);
-                    setIsResendEnabled(true); 
-                    return 0; 
+                    setIsResendEnabled(true);
+                    return 0;
                 }
-                return prevTimer - 1; 
+                return prevTimer - 1;
             });
-        }, 1000); 
+        }, 1000);
 
-        return () => clearInterval(intervalId); 
+        return () => clearInterval(intervalId);
     }, [timer]);
 
     useEffect(() => {
@@ -39,22 +39,22 @@ const Otp = () => {
                 <View className='top flex flex-col gap-3'>
                     <Text className="title text-3xl font-manbold">Send OTP Code</Text>
                     <Text className="subtitle text-base text-[#5C606A]">Enter the 6-digit code that we have sent via the
-                    phone number to <Text className="font-manbold text-black">[email]</Text>
+                        phone number to <Text className="font-manbold text-black">[email]</Text>
                     </Text>
                 </View>
                 <View className="otp-code mt-10">
-                    <OtpInput 
-                        numberOfDigits={6}  
+                    <OtpInput
+                        numberOfDigits={6}
                         focusStickBlinkingDuration={500}
                         hideStick={0}
                         onTextChange={(text) => setText(text)}
                         type="numeric"
-                        focusColor="#254EDB" 
-                        onFilled={(text) => console.log(`OTP is ${text}`)} 
-                        theme={{  
+                        focusColor="#254EDB"
+                        onFilled={(text) => { console.log(`OTP is ${text}`); Keyboard.dismiss(); }}
+                        theme={{
                             pinCodeContainerStyle: {
                                 backgroundColor: "#EDEEF1",
-                                borderRadius: 15, 
+                                borderRadius: 15,
                                 padding: 10,
                                 width: 50,
                                 height: 50,
@@ -64,17 +64,17 @@ const Otp = () => {
                             containerStyle: {
                                 width: "auto"
                             },
-                            focusStickStyle:{
+                            focusStickStyle: {
                                 transform: [{ rotate: '90deg' }],
                                 marginTop: 25,
                                 width: 1,
                                 height: 25,
                                 color: "#254EDB",
                             },
-                            filledPinCodeContainerStyle:{
-                                backgroundColor:"#ffffff",
+                            filledPinCodeContainerStyle: {
+                                backgroundColor: "#ffffff",
                             },
-                            pinCodeTextStyle:{
+                            pinCodeTextStyle: {
                                 fontSize: 20,
                                 fontFamily: "man-med"
                             }
@@ -91,14 +91,14 @@ const Otp = () => {
                 <TouchableOpacity
                     onPress={() => {
                         if (isResendEnabled) {
-                            setTimer(59); 
+                            setTimer(59);
                             setIsResendEnabled(false);
                         }
                     }}
-                    
+
                     className={`bg-white flex items-center mb-4 justify-center h-12 ${isResendEnabled ? '' : 'opacity-50'}`}>
                     <Text className="text-[#254EDB] font-manbold">
-                        Resend Code 
+                        Resend Code
                     </Text>
                 </TouchableOpacity>
                 <Animated.View
@@ -108,12 +108,11 @@ const Otp = () => {
                     className="buttons"
                 >
                     <TouchableOpacity
-                        onPress={() => text2.length==6 ? router.replace('/otp') : null}
-                        className={`${
-                            text2.length==6 ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
-                        } rounded-lg h-12 inline-flex items-center justify-center`}
+                        onPress={() => text2.length == 6 ? router.replace('/registerForm') : null}
+                        className={`${text2.length == 6 ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
+                            } rounded-lg h-12 inline-flex items-center justify-center`}
                     >
-                        <Text className={`text-base font-manbold ${text2.length==6 ? "text-white" : "text-[#CBCDD0]"}`}>
+                        <Text className={`text-base font-manbold ${text2.length == 6 ? "text-white" : "text-[#CBCDD0]"}`}>
                             Continue
                         </Text>
                     </TouchableOpacity>

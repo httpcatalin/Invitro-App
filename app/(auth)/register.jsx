@@ -79,7 +79,7 @@ const Register = () => {
                         </Text>
                     </TouchableOpacity>
                 </Animated.View>
-                <View className="px-10 py-5 items-center justify-center">
+                <View className="px-16 py-5 items-center justify-center">
                     <Text className="font-manmed text-xs text-[#5C606A] text-center">
                         By signing up or logging in, I accept the app’s
                         <Text className="text-[#254EDB]"> Terms of Service </Text> and

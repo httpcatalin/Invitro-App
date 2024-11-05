@@ -54,7 +54,7 @@ const SignUp = () => {
         </View>
       </View>
 
-      <View className="p-10 px-20 items-center justify-center">
+      <View className="px-20 py-5 items-center justify-center">
         <Text className="font-manmed text-xs text-[#5C606A] text-center">
           By signing up or logging in, I accept the app’s
           <Text className="text-[#254EDB]"> Terms of Service </Text> and

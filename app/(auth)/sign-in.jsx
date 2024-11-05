@@ -1,9 +1,8 @@
-import { View, Text, Animated, Image } from "react-native";
+import { View, Text, Animated, Image, TouchableOpacity   } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { TextInput, Button } from "react-native-paper";
 import { Link, useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { TouchableOpacity } from "react-native";
 
 const SignIn = () => {
   const [text1, setText1] = useState("");

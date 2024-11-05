@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
-import {  Stack, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Asset } from "expo-asset";
 import Splash from "./splash";
@@ -45,19 +45,19 @@ const RootLayout = () => {
   useEffect(() => {
     if (fontsError) {
       console.error("Font loading error:", fontsError);
-      return; 
+      return;
     }
 
-    if (fontsLoaded && assetsLoaded) 
+    if (fontsLoaded && assetsLoaded)
       router.replace('/onboard');
-  
+
   }, [fontsLoaded, assetsLoaded, fontsError, router]);
 
   if (!fontsLoaded || !assetsLoaded) {
     return <Splash />;
   }
 
-  
+
 
   return (
     <Stack>
@@ -103,7 +103,8 @@ const RootLayout = () => {
           },
         }}
       />
-            <Stack.Screen
+
+      <Stack.Screen
         name="(auth)/otp"
         options={{
           headerTitle: "",
@@ -122,7 +123,29 @@ const RootLayout = () => {
           },
         }}
       />
+      <Stack.Screen
+        name="(auth)/registerForm"
+        options={{
+          headerTitle: "",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.replace('/register')}>
+              <Image
+                source={require("../assets/images/Vector.png")}
+                style={{ width: 19, height: 19 }}
+              />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: "#ffffff",
+            borderBottomColor: "#EDEEF1",
+            borderBottomWidth: 1,
+          },
+        }}
+      />
+
     </Stack>
+
+
   );
 };
 
