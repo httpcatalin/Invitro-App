@@ -1,4 +1,3 @@
-
 # Invitro App
 
 **Version:** 1.0.0
@@ -17,14 +16,10 @@ Key functionalities include user onboarding, intuitive navigation, and seamless 
 - **Onboarding Screens:** Welcoming users with guided onboarding to enhance navigation.
 - **Material Design Components:** Utilizes React Native Paper for a visually appealing UI.
 
-
-
 <div style="text-align: center;">
     <img src="./assets/images/screenshot_onboard.png" alt="On Boarding Page 1" width="250" />
     <img src="./assets/images/screenshot_onboard2.png" alt="On Boarding Page 2" width="250" />
 </div>
-
-
 
 ## Technologies Used
 
@@ -118,7 +113,7 @@ npx expo start --ios
 For Development Server:
 
 ```bash
-npx run nodemon
+npm run nodemon
 ```
 
 ## Contributing
