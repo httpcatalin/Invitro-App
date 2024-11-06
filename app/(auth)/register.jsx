@@ -1,22 +1,33 @@
-import { View, Text, Animated,Image, Touchable } from "react-native";
+import { View, Text, Animated, Image, Touchable } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { TextInput, Button } from 'react-native-paper';
-import { Link, useRouter} from "expo-router";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native";
+import axios from "axios";
 
 const Register = () => {
     const [text, setText] = useState("");
-    const animation = useRef(new Animated.Value(1)).current; 
+    const animation = useRef(new Animated.Value(1)).current;
     const router = useRouter();
 
     useEffect(() => {
-      Animated.spring(animation, {
-        toValue: text ? 1.05 : 1,
-        friction: 1,
-        useNativeDriver: true,
-      }).start();
+        Animated.spring(animation, {
+            toValue: text ? 1.05 : 1,
+            friction: 1,
+            useNativeDriver: true,
+        }).start();
     }, [text]);
+
+    const handleOTP = async () => {
+        try {
+            console.log('Sending OTP for:', text);
+            const response = await axios.post('http://localhost:4000/send-otp', { email: text });
+            router.replace('/otp');
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error sending OTP: ', error.response?.data || error.message);
+        }
+    };
 
     return (
         <View className='flex-1 p-6 h-screen bg-white'>
@@ -25,20 +36,20 @@ const Register = () => {
                     <Text className="title text-3xl font-manbold">Register</Text>
                     <Text className="subtitle text-base text-[#5C606A]">Please enter your email to continue your registration</Text>
                 </View>
-                <View className=' flex-1 under-top mt-9'>
-                    <View className="flex gap-2 flex-col ">
+                <View className='flex-1 under-top mt-9'>
+                    <View className="flex gap-2 flex-col">
                         <Text className="font-manmed text-base text-black mb-1">Email</Text>
-                    <TextInput
-                            left={
+                        <TextInput
+                            left={(
                                 <TextInput.Icon
                                     icon={() => (
                                         <Image
                                             source={require("../../assets/images/mail.png")}
-                                            style={{ width: 24, height: 24 }} 
+                                            style={{ width: 24, height: 24 }}
                                         />
                                     )}
                                 />
-                            }
+                            )}
                             placeholder="email.example@gmail.com"
                             value={text}
                             mode="outlined"
@@ -65,16 +76,10 @@ const Register = () => {
                     className="buttons"
                 >
                     <TouchableOpacity
-                      onPress={()=> text ? router.replace('/otp') : null}
-                        className={`${
-                            text ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
-                        } rounded-lg h-12 inline-flex items-center justify-center`}
+                        onPress={handleOTP}
+                        className={`${text ? "bg-[#254EDB]" : "bg-[#EDEEF1]"} rounded-lg h-12 inline-flex items-center justify-center`}
                     >
-                        <Text
-                            className={`text-base font-manbold ${
-                                text ? "text-white" : "text-[#CBCDD0]"
-                            }`}
-                        >
+                        <Text className={`text-base font-manbold ${text ? "text-white" : "text-[#CBCDD0]"}`}>
                             Continue
                         </Text>
                     </TouchableOpacity>
@@ -88,7 +93,7 @@ const Register = () => {
                 </View>
             </View>
         </View>
-    )
-}
+    );
+};
 
 export default Register;
