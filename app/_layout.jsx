@@ -3,8 +3,13 @@ import { View, Image, TouchableOpacity } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import { Asset } from "expo-asset";
+import { Provider } from "react-redux";
+import store from "../store/store";
 import Splash from "./splash";
+
 const preloadAssets = async () => {
+
+
   const imageAssets = [
     require('../assets/images/doctor.jpg'),
     require('../assets/images/gloves.jpg'),
@@ -56,96 +61,91 @@ const RootLayout = () => {
   if (!fontsLoaded || !assetsLoaded) {
     return <Splash />;
   }
-
-
-
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="splash" options={{ headerShown: false }} />
-      <Stack.Screen name="onboard" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)/sign-up" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="(auth)/sign-in"
-        options={{
-          headerTitle: "",
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.replace('/sign-up')}>
-              <Image
-                source={require("../assets/images/Vector.png")}
-                style={{ width: 19, height: 19 }}
-              />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: "#ffffff",
-            borderBottomColor: "#EDEEF1",
-            borderBottomWidth: 1,
-          },
-        }}
-      />
-      <Stack.Screen
-        name="(auth)/register"
-        options={{
-          headerTitle: "",
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.replace('/sign-up')}>
-              <Image
-                source={require("../assets/images/Vector.png")}
-                style={{ width: 19, height: 19 }}
-              />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: "#ffffff",
-            borderBottomColor: "#EDEEF1",
-            borderBottomWidth: 1,
-          },
-        }}
-      />
-
-      <Stack.Screen
-        name="(auth)/otp"
-        options={{
-          headerTitle: "",
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.replace('/register')}>
-              <Image
-                source={require("../assets/images/Vector.png")}
-                style={{ width: 19, height: 19 }}
-              />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: "#ffffff",
-            borderBottomColor: "#EDEEF1",
-            borderBottomWidth: 1,
-          },
-        }}
-      />
-      <Stack.Screen
-        name="(auth)/registerForm"
-        options={{
-          headerTitle: "",
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.replace('/register')}>
-              <Image
-                source={require("../assets/images/Vector.png")}
-                style={{ width: 19, height: 19 }}
-              />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: "#ffffff",
-            borderBottomColor: "#EDEEF1",
-            borderBottomWidth: 1,
-          },
-        }}
-      />
-
-    </Stack>
-
-
+    <Provider store={store}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="splash" options={{ headerShown: false }} />
+        <Stack.Screen name="onboard" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)/sign-up" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(auth)/sign-in"
+          options={{
+            headerTitle: "",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.replace('/sign-up')}>
+                <Image
+                  source={require("../assets/images/Vector.png")}
+                  style={{ width: 19, height: 19 }}
+                />
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: "#ffffff",
+              borderBottomColor: "#EDEEF1",
+              borderBottomWidth: 1,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="(auth)/register"
+          options={{
+            headerTitle: "",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.replace('/sign-up')}>
+                <Image
+                  source={require("../assets/images/Vector.png")}
+                  style={{ width: 19, height: 19 }}
+                />
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: "#ffffff",
+              borderBottomColor: "#EDEEF1",
+              borderBottomWidth: 1,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="(auth)/otp"
+          options={{
+            headerTitle: "",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.replace('/register')}>
+                <Image
+                  source={require("../assets/images/Vector.png")}
+                  style={{ width: 19, height: 19 }}
+                />
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: "#ffffff",
+              borderBottomColor: "#EDEEF1",
+              borderBottomWidth: 1,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="(auth)/registerForm"
+          options={{
+            headerTitle: "",
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.replace('/register')}>
+                <Image
+                  source={require("../assets/images/Vector.png")}
+                  style={{ width: 19, height: 19 }}
+                />
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: "#ffffff",
+              borderBottomColor: "#EDEEF1",
+              borderBottomWidth: 1,
+            },
+          }}
+        />
+      </Stack>
+    </Provider>
   );
 };
 

@@ -1,14 +1,19 @@
-import { View, Text, Animated, TouchableOpacity, Image, Keyboard } from "react-native";
+import { View, Text, Animated, TouchableOpacity, Image, Keyboard, Alert } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "expo-router";
 import { OtpInput } from "react-native-otp-entry";
+import { useDispatch, useSelector } from 'react-redux';
+import { ActivityIndicator } from 'react-native-paper';
+import axios from "axios";
 
 const Otp = () => {
     const [text2, setText] = useState("");
     const [timer, setTimer] = useState(59);
+    const [isVerifying, setIsVerifying] = useState(false);
     const [isResendEnabled, setIsResendEnabled] = useState(false);
     const animation = useRef(new Animated.Value(1)).current;
     const router = useRouter();
+    const email = useSelector((state) => state.otp.email);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -33,13 +38,47 @@ const Otp = () => {
         }).start();
     }, [text2]);
 
+    const handleResend = async () => {
+        try {
+            console.log('Sending OTP for:', text2);
+            const response = await axios.post('http://192.168.100.2:4000/send-otp', { email: email });
+            router.replace('/otp');
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error sending OTP: ', error.response?.data || error.message);
+            Alert.alert("Error", "Failed to send OTP. Please try again.");
+        }
+    };
+
+    const handleOTP = async (otp) => {
+        Keyboard.dismiss();
+        setIsVerifying(true);
+
+        try {
+            const response = await axios.post('http://192.168.100.2:4000/verify-otp', { email, otpInput: otp });
+
+            if (response.data.status === 'success') {
+                Alert.alert("Success", response.data.message);
+                router.replace('/registerForm');
+            } else {
+                Alert.alert("Verification Failed", response.data.message);
+            }
+
+        } catch (error) {
+            Alert.alert("Error", "Something went wrong. Please try again later.");
+            console.error("OTP verification error:", error);
+        } finally {
+            setIsVerifying(false);
+        }
+    };
+
     return (
         <View className='flex-1 p-6 h-screen bg-white'>
-            <View className="middle flex-1 ">
+            <View className="middle flex-1">
                 <View className='top flex flex-col gap-3'>
                     <Text className="title text-3xl font-manbold">Send OTP Code</Text>
                     <Text className="subtitle text-base text-[#5C606A]">Enter the 6-digit code that we have sent via the
-                        phone number to <Text className="font-manbold text-black">[email]</Text>
+                        email to <Text className="font-manbold text-black">{email}</Text>
                     </Text>
                 </View>
                 <View className="otp-code mt-10">
@@ -50,7 +89,7 @@ const Otp = () => {
                         onTextChange={(text) => setText(text)}
                         type="numeric"
                         focusColor="#254EDB"
-                        onFilled={(text) => { console.log(`OTP is ${text}`); Keyboard.dismiss(); }}
+                        onFilled={(otp) => { handleOTP(otp) }}
                         theme={{
                             pinCodeContainerStyle: {
                                 backgroundColor: "#EDEEF1",
@@ -93,10 +132,11 @@ const Otp = () => {
                         if (isResendEnabled) {
                             setTimer(59);
                             setIsResendEnabled(false);
+                            handleResend();
                         }
                     }}
-
-                    className={`bg-white flex items-center mb-4 justify-center h-12 ${isResendEnabled ? '' : 'opacity-50'}`}>
+                    className={`bg-white flex items-center mb-4 justify-center h-12 ${isResendEnabled ? '' : 'opacity-50'}`}
+                >
                     <Text className="text-[#254EDB] font-manbold">
                         Resend Code
                     </Text>
@@ -108,13 +148,24 @@ const Otp = () => {
                     className="buttons"
                 >
                     <TouchableOpacity
-                        onPress={() => text2.length == 6 ? router.replace('/registerForm') : null}
-                        className={`${text2.length == 6 ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
-                            } rounded-lg h-12 inline-flex items-center justify-center`}
+                        onPress={() => handleOTP(text2)}
+                        className={`${text2.length === 6 ? "bg-[#254EDB]" : "bg-[#EDEEF1]"} rounded-lg h-12 inline-flex items-center justify-center`}
+                        disabled={isVerifying || text2.length !== 6}
                     >
-                        <Text className={`text-base font-manbold ${text2.length == 6 ? "text-white" : "text-[#CBCDD0]"}`}>
-                            Continue
-                        </Text>
+                        {isVerifying ? (
+                            <View className="flex-row items-center">
+                                <ActivityIndicator color="white" size="small" />
+                                <Text className="text-base font-manbold text-white ml-2">
+                                    Verifying...
+                                </Text>
+                            </View>
+                        ) : (
+                            <Text
+                                className={`text-base font-manbold ${text2.length === 6 ? "text-white" : "text-[#CBCDD0]"}`}
+                            >
+                                Continue
+                            </Text>
+                        )}
                     </TouchableOpacity>
                 </Animated.View>
                 <View className="px-10 py-5 items-center justify-center">
@@ -126,7 +177,7 @@ const Otp = () => {
                 </View>
             </View>
         </View>
-    )
+    );
 }
 
 export default Otp;

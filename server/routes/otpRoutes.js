@@ -4,7 +4,6 @@ const otpController = require('../controllers/otpController');
 
 router.post('/send-otp', async (req, res) => {
     const { email } = req.body;
-
     try {
         await otpController.sendOTP(email);
         res.status(200).json({ message: 'OTP sent successfully' });

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { TextInput } from 'react-native-paper';
 import { Link, useRouter } from 'expo-router';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSelector } from 'react-redux';
 
 const strengthLevels = [
   { label: 'Weak', color: '#f04438' },
@@ -12,13 +13,14 @@ const strengthLevels = [
 
 const RegisterForm = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState('');
   const router = useRouter();
   const barAnimation = useRef(new Animated.Value(0)).current;
+
+  const email = useSelector((state) => state.otp.email);
 
   const evaluatePasswordStrength = (password) => {
     if (password.length === 0) {
@@ -56,7 +58,7 @@ const RegisterForm = () => {
         </View>
         <View className="inputs  mt-4   flex-col">
           <View className="flex gap-2">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Email or Username</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">Username</Text>
             <TextInput
               placeholder="Enter your full name"
               value={name}
@@ -90,6 +92,7 @@ const RegisterForm = () => {
                 },
                 roundness: 12,
               }}
+              editable={false}
               onChangeText={(text) => setEmail(text)}
             />
           </View>

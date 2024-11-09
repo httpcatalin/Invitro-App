@@ -4,12 +4,14 @@ import { TextInput, Button } from 'react-native-paper';
 import { useRouter } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import axios from "axios";
+import { useDispatch } from 'react-redux';
+import { setEmail } from '../../store/otpSlice';
 
 const Register = () => {
     const [text, setText] = useState("");
     const animation = useRef(new Animated.Value(1)).current;
     const router = useRouter();
-
+    const dispatch = useDispatch();
     useEffect(() => {
         Animated.spring(animation, {
             toValue: text ? 1.05 : 1,
@@ -21,8 +23,9 @@ const Register = () => {
     const handleOTP = async () => {
         try {
             console.log('Sending OTP for:', text);
-            const response = await axios.post('http://localhost:4000/send-otp', { email: text });
-            router.replace('/otp');
+            const response = await axios.post('http://192.168.100.2:4000/send-otp', { email: text });
+            dispatch(setEmail(text));
+            router.replace('/otp')
             console.log(response.data);
         } catch (error) {
             console.error('Error sending OTP: ', error.response?.data || error.message);
