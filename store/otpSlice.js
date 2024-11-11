@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const otpSlice = createSlice({
-  name: 'otp',
+  name: "otp",
   initialState: {
-    email: '',
+    email: "",
   },
   reducers: {
     setEmail: (state, action) => {
