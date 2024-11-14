@@ -20,24 +20,28 @@ const SignUp = () => {
 
         <View className="flex flex-col gap-4 mt-14 space-y-4">
           <TouchableOpacity
-           onPress={() => router.replace('/register')}
+            onPress={() => router.replace("/register")}
             className="bg-[#254EDB]  rounded-lg h-12 flex items-center justify-center text-xl font-manbold"
           >
-            <Link href="/register" className="text-base text-white font-manbold">
+            <Link
+              href="/register"
+              className="text-base text-white font-manbold"
+            >
               Continue with email
             </Link>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            className="bg-white border border-[#C0C4CB] rounded-lg h-12 flex flex-row items-center justify-center"
-          >
+          <TouchableOpacity className="bg-white border border-[#C0C4CB] rounded-lg h-12 flex flex-row items-center justify-center">
             <View className="flex flex-row items-center justify-center">
               <Image
                 source={require("../../assets/images/google.png")}
                 resizeMode="contain"
                 className="w-4 h-4 mr-2 flex items-center justify-center"
               />
-              <Link href='/google' className="text-base font-manbold mr-1 text-center text-[#2349CC]">
+              <Link
+                href="/auth/google"
+                className="text-base font-manbold mr-1 text-center text-[#2349CC]"
+              >
                 Sign In with Google
               </Link>
             </View>

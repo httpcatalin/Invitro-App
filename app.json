@@ -3,7 +3,6 @@
     "name": "Invitro-App",
     "slug": "Invitro-App",
     "version": "1.0.0",
-    "scheme": "Invitro-App",
     "orientation": "portrait",
     "icon": "",
     "userInterfaceStyle": "light",
@@ -12,21 +11,43 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "scheme": "com.catalun.invitroapp",
+    "authSession": {
+      "redirect": {
+        "url": "https://auth.expo.io/@catalun/Invitro-App"
+      }
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.catalun.invitroapp",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.catalun.invitroapp",
+      "versionCode": 1
     },
     "web": {
       "favicon": ""
     },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ]
+    "plugins": ["expo-router", "expo-font"],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d7087940-25ac-4cf5-857f-5b8bb5455159"
+      }
+    },
+    "owner": "catalun",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d7087940-25ac-4cf5-857f-5b8bb5455159"
+    }
   }
 }

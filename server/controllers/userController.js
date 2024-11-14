@@ -1,6 +1,5 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/userModel');
-
+const bcrypt = require("bcrypt");
+const User = require("../models/userModel");
 
 exports.registerUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -18,11 +17,28 @@ exports.registerUser = async (req, res) => {
     });
 
     res.send({ status: "ok", data: "User created! " });
-
   } catch (error) {
-
     res.send({ status: "error", data: error.message });
-    
+  }
+};
+exports.registerUserGoogle = async (req, res) => {
+  const { firstName, lastName, email, googleId, picture } = req.body;
+
+  const oldUser = await User.findOne({ email: email.toLowerCase() });
+  if (oldUser) return res.send({ data: "User already exists" });
+
+  try {
+    await User.create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email.toLowerCase(),
+      googleId: googleId,
+      picture: picture,
+    });
+
+    res.send({ status: "ok", data: "User created! " });
+  } catch (error) {
+    res.send({ status: "error", data: error.message });
   }
 };
 
@@ -33,24 +49,20 @@ exports.loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ email: email.toLowerCase() });
 
-    if (!user) 
+    if (!user)
       return res.status(404).send({ status: "error", data: "User not found" });
-    
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log("Password valid: ", isPasswordValid);
 
-    if (!isPasswordValid) 
+    if (!isPasswordValid)
       return res
         .status(401)
         .send({ status: "error", data: "Invalid password" });
-    
 
     res.send({ status: "ok", data: "Login successful" });
-    
   } catch (error) {
     console.error("Login error: ", error.message);
     res.send({ status: "error", data: error.message });
   }
 };
-

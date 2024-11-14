@@ -1,22 +1,29 @@
-import { View, Text, TouchableOpacity, Platform, Keyboard, Animated } from 'react-native';
-import React, { useEffect, useState, useRef } from 'react';
-import { TextInput } from 'react-native-paper';
-import { Link, useRouter } from 'expo-router';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  Keyboard,
+  Animated,
+} from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { TextInput } from "react-native-paper";
+import { Link, useRouter } from "expo-router";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useSelector } from "react-redux";
 
 const strengthLevels = [
-  { label: 'Weak', color: '#f04438' },
-  { label: 'Medium', color: '#ef6820' },
-  { label: 'Strong', color: '#16b364' }
+  { label: "Weak", color: "#f04438" },
+  { label: "Medium", color: "#ef6820" },
+  { label: "Strong", color: "#16b364" },
 ];
 
 const RegisterForm = () => {
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState("");
   const router = useRouter();
   const barAnimation = useRef(new Animated.Value(0)).current;
 
@@ -24,7 +31,7 @@ const RegisterForm = () => {
 
   const evaluatePasswordStrength = (password) => {
     if (password.length === 0) {
-      setPasswordStrength('');
+      setPasswordStrength("");
       return;
     }
 
@@ -34,7 +41,6 @@ const RegisterForm = () => {
     if (password.length >= 10 && /[@$!%*?&#]/.test(password)) strengthIndex++;
 
     setPasswordStrength(strengthLevels[strengthIndex]);
-
 
     Animated.timing(barAnimation, {
       toValue: strengthIndex,
@@ -49,7 +55,7 @@ const RegisterForm = () => {
 
   return (
     <View className=" h-screen bg-white p-6 ">
-      <View className='flex  flex-col' >
+      <View className="flex  flex-col">
         <View className="top flex  flex-col gap-3">
           <Text className="title text-3xl font-manbold">Register</Text>
           <Text className="subtitle text-base text-[#5C606A]">
@@ -58,7 +64,9 @@ const RegisterForm = () => {
         </View>
         <View className="inputs  mt-4   flex-col">
           <View className="flex gap-2">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Username</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">
+              Full Name
+            </Text>
             <TextInput
               placeholder="Enter your full name"
               value={name}
@@ -67,9 +75,9 @@ const RegisterForm = () => {
               className="bg-white overflow-hidden"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
@@ -77,7 +85,9 @@ const RegisterForm = () => {
             />
           </View>
           <View className="flex gap-2 mt-4">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Email</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">
+              Email
+            </Text>
             <TextInput
               placeholder="Enter your Email"
               value={email}
@@ -86,9 +96,9 @@ const RegisterForm = () => {
               className="bg-white"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
@@ -97,7 +107,9 @@ const RegisterForm = () => {
             />
           </View>
           <View className="flex gap-2 mt-4">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Password</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">
+              Password
+            </Text>
             <TextInput
               placeholder="Password"
               value={password}
@@ -107,9 +119,9 @@ const RegisterForm = () => {
               className="bg-white"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
@@ -117,12 +129,15 @@ const RegisterForm = () => {
                 <TextInput.Icon
                   icon={() => (
                     <Icon
-                      name={showPassword ? 'eye-off' : 'eye'}
+                      name={showPassword ? "eye-off" : "eye"}
                       size={20}
                       color="#CBCDD0"
                     />
                   )}
-                  onPress={() => { Keyboard.dismiss(); setShowPassword(!showPassword); }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setShowPassword(!showPassword);
+                  }}
                 />
               }
               onChangeText={(text) => setPassword(text)}
@@ -143,12 +158,12 @@ const RegisterForm = () => {
                         backgroundColor:
                           index <= strengthLevels.indexOf(passwordStrength)
                             ? passwordStrength.color
-                            : '#DDE0E5',
+                            : "#DDE0E5",
                         marginHorizontal: 2,
                         opacity: barAnimation.interpolate({
                           inputRange: [0, 1, 2],
                           outputRange: [0.5, 0.75, 1],
-                          extrapolate: 'clamp',
+                          extrapolate: "clamp",
                         }),
                       }}
                     />
@@ -158,7 +173,9 @@ const RegisterForm = () => {
             ) : null}
           </View>
           <View className="flex gap-2 mt-4">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Confirm password</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">
+              Confirm password
+            </Text>
             <TextInput
               placeholder="Enter your password"
               value={confirmPassword}
@@ -168,9 +185,9 @@ const RegisterForm = () => {
               className="bg-white"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
@@ -178,12 +195,15 @@ const RegisterForm = () => {
                 <TextInput.Icon
                   icon={() => (
                     <Icon
-                      name={showPassword ? 'eye-off' : 'eye'}
+                      name={showPassword ? "eye-off" : "eye"}
                       size={20}
                       color="#CBCDD0"
                     />
                   )}
-                  onPress={() => { Keyboard.dismiss(); setShowPassword(!showPassword); }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setShowPassword(!showPassword);
+                  }}
                 />
               }
               onChangeText={(text) => setConfirmPassword(text)}
@@ -193,20 +213,28 @@ const RegisterForm = () => {
       </View>
       <View className="bot flex flex-col items-center justify-center mt-24  ">
         <TouchableOpacity
-          onPress={() => password.length >= 6 ? router.replace('/sign-in') : null}
-          className={`${password.length >= 6 ? 'bg-[#254EDB]' : 'bg-[#EDEEF1]'} w-full rounded-lg h-12 flex items-center justify-center`}
+          onPress={() =>
+            password.length >= 6 ? router.replace("/sign-in") : null
+          }
+          className={`${
+            password.length >= 6 ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
+          } w-full rounded-lg h-12 flex items-center justify-center`}
         >
           <Text
-            className={`text-base font-manbold ${password.length >= 6 ? 'text-white' : 'text-[#CBCDD0]'}`}
+            className={`text-base font-manbold ${
+              password.length >= 6 ? "text-white" : "text-[#CBCDD0]"
+            }`}
           >
             Sign Up
           </Text>
         </TouchableOpacity>
-        <Link href='/sign-in' className='mt-6 font-manbold text-base text-[#254EDB]'>
+        <Link
+          href="/sign-in"
+          className="mt-6 font-manbold text-base text-[#254EDB]"
+        >
           I have an account? Sign in
         </Link>
       </View>
-
     </View>
   );
 };
