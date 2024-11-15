@@ -144,6 +144,13 @@ const RootLayout = () => {
             },
           }}
         />
+        <Stack.Screen
+          name="oauthredirect"
+          options={{
+            headerShown: false,  
+          }}
+        />
+
       </Stack>
     </Provider>
   );

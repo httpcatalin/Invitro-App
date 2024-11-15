@@ -41,28 +41,28 @@ const RegisterForm = () => {
   
     let strengthIndex = 0;
   
-    // Criteria for strength
-    if (password.length >= 8) strengthIndex++; // Minimum length criteria
-    if (/[A-Z]/.test(password)) strengthIndex++; // Contains uppercase letter
-    if (/\d/.test(password)) strengthIndex++; // Contains a number
-    if (/[@$!%*?&#]/.test(password)) strengthIndex++; // Contains special character
+
+    if (password.length >= 8) strengthIndex++; 
+    if (/[A-Z]/.test(password)) strengthIndex++; 
+    if (/\d/.test(password)) strengthIndex++; 
+    if (/[@$!%*?&#]/.test(password)) strengthIndex++; 
   
-    // Map the strengthIndex to appropriate strength level
+   
     let strengthLevel;
     if (strengthIndex <= 1) {
-      strengthLevel = strengthLevels[0]; // Weak
+      strengthLevel = strengthLevels[0]; 
     } else if (strengthIndex === 2 || strengthIndex === 3) {
-      strengthLevel = strengthLevels[1]; // Medium
+      strengthLevel = strengthLevels[1]; 
     } else if (strengthIndex >= 4) {
-      strengthLevel = strengthLevels[2]; // Strong
+      strengthLevel = strengthLevels[2]; 
     }
   
     setPasswordStrength(strengthLevel);
   
-    // Animate the strength bar based on the strength level
+   
     Animated.timing(barAnimation, {
-      toValue: strengthIndex - 1, // Since strengthIndex starts from 1
-      duration: 500, // Adjust duration as needed
+      toValue: strengthIndex - 1, 
+      duration: 500, 
       useNativeDriver: false,
     }).start();
   };
@@ -89,18 +89,18 @@ const RegisterForm = () => {
 
     const LOCALHOST = Platform.OS === "ios" ? "127.0.0.1" : "10.0.2.2";
   
-    const [firstName, lastName = ''] = name.split(' '); // Ensure lastName is defined if absent in the input
+    const [firstName, lastName = ''] = name.split(' '); 
   
     const personData = { firstName, lastName };
 
     try {
       console.log(personData);
-      // First API call to create the person
+
       const response = await axios.post(`http://${LOCALHOST}:4000/registerUserAPI`, personData);
       console.log(response.data);
-      if (response.status === 201) { // Check `response.status` instead of `response.data.status`
+      if (response.status === 201) { 
         
-        const personId = response.data.id; // Assign `personId` from response data
+        const personId = response.data.id; 
   
         const data = {
           firstName,
@@ -110,7 +110,7 @@ const RegisterForm = () => {
           personId
         };
   
-        // Second API call to register the user with `personId`
+   
         const registerResponse = await axios.post(`http://${LOCALHOST}:4000/registerUser`, data);
         
         if (registerResponse.data.status === "ok") {
