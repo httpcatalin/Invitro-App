@@ -5,9 +5,10 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import * as WebBrowser from "expo-web-browser";
 import { useRouter } from "expo-router";
 import { useAuthRequest } from "expo-auth-session/providers/google";
-import { GOOGLE_CLIENT_ID_IOS } from "@env";
+import { GOOGLE_CLIENT_ID_IOS,GOOGLE_CLIENT_ID_ANDROID } from "@env";
 import axios from "axios";
 import { Platform } from "react-native";
+
 WebBrowser.maybeCompleteAuthSession();
 
 const SignIn = () => {
@@ -19,7 +20,7 @@ const SignIn = () => {
   const isFormFilled = text1 && text2;
 
   const [request, response, promptAsync] = useAuthRequest({
-    clientId: GOOGLE_CLIENT_ID_IOS,
+    clientId: Platform.OS === 'ios' ? GOOGLE_CLIENT_ID_IOS: GOOGLE_CLIENT_ID_ANDROID,
   });
 
   useEffect(() => {

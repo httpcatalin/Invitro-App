@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Invitro-App",
+    "name": "Invitro",
     "slug": "Invitro-App",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "",
+    "icon": "./assets/images/logo_copy.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "",
@@ -25,7 +25,8 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "bundleIdentifier": "com.catalun.invitroapp"
       },
       "package": "com.catalun.invitroapp",
       "versionCode": 1
