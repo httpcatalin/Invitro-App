@@ -7,9 +7,11 @@ const userModel = new mongoose.Schema(
     email: { type: String, unique: true },
     password: String,
     personId: Number,
+    googleId: { type: String, default: "-1" },
+    picture : { type: String, default: "" }
   },
   { collection: "users" }
 );
 
-const User = mongoose.model("users", userModel); 
+const User = mongoose.model("users", userModel);
 module.exports = User;

@@ -1,21 +1,28 @@
-import { View, Text, TouchableOpacity, Platform, Keyboard, Animated, Alert } from 'react-native';
-import React, { useEffect, useState, useRef } from 'react';
-import { TextInput } from 'react-native-paper';
-import { Link, useRouter } from 'expo-router';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import axios from 'axios';
-
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  Keyboard,
+  Animated,
+  Alert
+} from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { TextInput } from "react-native-paper";
+import { Link, useRouter } from "expo-router";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useSelector } from "react-redux";
+import axios from "axios";
 const strengthLevels = [
-  { label: 'Weak', color: '#f04438' },
-  { label: 'Medium', color: '#ef6820' },
-  { label: 'Strong', color: '#16b364' }
+  { label: "Weak", color: "#f04438" },
+  { label: "Medium", color: "#ef6820" },
+  { label: "Strong", color: "#16b364" },
 ];
 
 const RegisterForm = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState('');
   const [error, setError] = useState('');
@@ -24,9 +31,11 @@ const RegisterForm = () => {
 
   const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
+  const email = useSelector((state) => state.otp.email);
+
   const evaluatePasswordStrength = (password) => {
     if (password.length === 0) {
-      setPasswordStrength('');
+      setPasswordStrength("");
       return;
     }
   
@@ -77,6 +86,8 @@ const RegisterForm = () => {
       Alert.alert('Invalid Email', 'Please enter a valid email address.');
       return;
     }
+
+    const LOCALHOST = Platform.OS === "ios" ? "127.0.0.1" : "10.0.2.2";
   
     const [firstName, lastName = ''] = name.split(' '); // Ensure lastName is defined if absent in the input
   
@@ -85,7 +96,7 @@ const RegisterForm = () => {
     try {
       console.log(personData);
       // First API call to create the person
-      const response = await axios.post('http://10.0.2.2:4000/registerUserAPI', personData);
+      const response = await axios.post(`http://${LOCALHOST}:4000/registerUserAPI`, personData);
       console.log(response.data);
       if (response.status === 201) { // Check `response.status` instead of `response.data.status`
         
@@ -100,7 +111,7 @@ const RegisterForm = () => {
         };
   
         // Second API call to register the user with `personId`
-        const registerResponse = await axios.post('http://10.0.2.2:4000/registerUser', data);
+        const registerResponse = await axios.post(`http://${LOCALHOST}:4000/registerUser`, data);
         
         if (registerResponse.data.status === "ok") {
           router.replace('/sign-in');
@@ -118,7 +129,7 @@ const RegisterForm = () => {
 
   return (
     <View className=" h-screen bg-white p-6 ">
-      <View className='flex  flex-col' >
+      <View className="flex  flex-col">
         <View className="top flex  flex-col gap-3">
           <Text className="title text-3xl font-manbold">Register</Text>
           <Text className="subtitle text-base text-[#5C606A]">
@@ -136,9 +147,9 @@ const RegisterForm = () => {
               className="bg-white overflow-hidden"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
@@ -146,7 +157,9 @@ const RegisterForm = () => {
             />
           </View>
           <View className="flex gap-2 mt-4">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Email</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">
+              Email
+            </Text>
             <TextInput
               placeholder="Enter your Email"
               value={email}
@@ -155,17 +168,20 @@ const RegisterForm = () => {
               className="bg-white"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
+              editable={false}
               onChangeText={(text) => setEmail(text)}
             />
           </View>
           <View className="flex gap-2 mt-4">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Password</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">
+              Password
+            </Text>
             <TextInput
               placeholder="Password"
               value={password}
@@ -175,9 +191,9 @@ const RegisterForm = () => {
               className="bg-white"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
@@ -185,12 +201,15 @@ const RegisterForm = () => {
                 <TextInput.Icon
                   icon={() => (
                     <Icon
-                      name={showPassword ? 'eye-off' : 'eye'}
+                      name={showPassword ? "eye-off" : "eye"}
                       size={20}
                       color="#CBCDD0"
                     />
                   )}
-                  onPress={() => { Keyboard.dismiss(); setShowPassword(!showPassword); }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setShowPassword(!showPassword);
+                  }}
                 />
               }
               onChangeText={(text) => setPassword(text)}
@@ -211,12 +230,12 @@ const RegisterForm = () => {
                         backgroundColor:
                           index <= strengthLevels.indexOf(passwordStrength)
                             ? passwordStrength.color
-                            : '#DDE0E5',
+                            : "#DDE0E5",
                         marginHorizontal: 2,
                         opacity: barAnimation.interpolate({
                           inputRange: [0, 1, 2],
                           outputRange: [0.5, 0.75, 1],
-                          extrapolate: 'clamp',
+                          extrapolate: "clamp",
                         }),
                       }}
                     />
@@ -226,7 +245,9 @@ const RegisterForm = () => {
             ) : null}
           </View>
           <View className="flex gap-2 mt-4">
-            <Text className="font-manmed text-base text-[#111826] mb-1">Confirm password</Text>
+            <Text className="font-manmed text-base text-[#111826] mb-1">
+              Confirm password
+            </Text>
             <TextInput
               placeholder="Enter your password"
               value={confirmPassword}
@@ -236,9 +257,9 @@ const RegisterForm = () => {
               className="bg-white"
               theme={{
                 colors: {
-                  outline: '#C0C4CB',
-                  placeholder: '#CBCDD0',
-                  primary: '#C0C4CB',
+                  outline: "#C0C4CB",
+                  placeholder: "#CBCDD0",
+                  primary: "#C0C4CB",
                 },
                 roundness: 12,
               }}
@@ -246,12 +267,15 @@ const RegisterForm = () => {
                 <TextInput.Icon
                   icon={() => (
                     <Icon
-                      name={showPassword ? 'eye-off' : 'eye'}
+                      name={showPassword ? "eye-off" : "eye"}
                       size={20}
                       color="#CBCDD0"
                     />
                   )}
-                  onPress={() => { Keyboard.dismiss(); setShowPassword(!showPassword); }}
+                  onPress={() => {
+                    Keyboard.dismiss();
+                    setShowPassword(!showPassword);
+                  }}
                 />
               }
               onChangeText={(text) => setConfirmPassword(text)}
@@ -265,16 +289,20 @@ const RegisterForm = () => {
           className={`${password.length >= 8 ? 'bg-[#254EDB]' : 'bg-[#EDEEF1]'} w-full rounded-lg h-12 flex items-center justify-center`}
         >
           <Text
-            className={`text-base font-manbold ${password.length >= 6 ? 'text-white' : 'text-[#CBCDD0]'}`}
+            className={`text-base font-manbold ${
+              password.length >= 6 ? "text-white" : "text-[#CBCDD0]"
+            }`}
           >
             Sign Up
           </Text>
         </TouchableOpacity>
-        <Link href='/sign-in' className='mt-6 font-manbold text-base text-[#254EDB]'>
+        <Link
+          href="/sign-in"
+          className="mt-6 font-manbold text-base text-[#254EDB]"
+        >
           I have an account? Sign in
         </Link>
       </View>
-
     </View>
   );
 };

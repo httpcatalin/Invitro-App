@@ -1,9 +1,14 @@
-import { View, Text, Animated, Image, TouchableOpacity   } from "react-native";
+import { View, Text, Animated, Image, TouchableOpacity, Platform, Alert } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
-import { TextInput, Button } from "react-native-paper";
-import { Link, useRouter } from "expo-router";
+import { TextInput } from "react-native-paper";
 import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import * as WebBrowser from "expo-web-browser";
+import { useRouter } from "expo-router";
+import { useAuthRequest } from "expo-auth-session/providers/google";
+import { GOOGLE_CLIENT_ID_IOS, GOOGLE_CLIENT_ID_ANDROID } from "@env";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +17,40 @@ const SignIn = () => {
   const animation = useRef(new Animated.Value(1)).current;
   const router = useRouter();
   const isFormFilled = email && password;
+
+  const [request, response, promptAsync] = useAuthRequest({
+    clientId: Platform.OS === "ios" ? GOOGLE_CLIENT_ID_IOS : GOOGLE_CLIENT_ID_ANDROID,
+  });
+
+  useEffect(() => {
+    if (response?.type === "success") {
+      const LOCALHOST = Platform.OS === "ios" ? "127.0.0.1" : "10.0.2.2";
+      const { authentication } = response;
+
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${authentication.accessToken}`
+        )
+        .then((res) => {
+          axios.post(`http://${LOCALHOST}:4000/check-email`,{email:res.data.email})
+          .then((r)=>{
+            if(r.data.status === "ok"){
+              Alert.alert("User have not been found", "You have to register the email address first.");
+            } else if(r.data.status === "error") {
+              router.replace("/home");
+            }
+            else {
+              console.error("Error logging user");
+            }
+          })
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error.message);
+        });
+    } else if (response?.type === "error") {
+      console.error("OAuth error:", response.error);
+    }
+  }, [response]);
 
   useEffect(() => {
     Animated.spring(animation, {
@@ -23,15 +62,16 @@ const SignIn = () => {
 
   const handleLogin = async () => {
     const personData = { email, password };
+    const LOCALHOST = Platform.OS === "ios" ? "127.0.0.1" : "10.0.2.2";
 
     try {
-      const loginResponse = await axios.post('http://10.0.2.2:4000/loginUser', personData);
+      const loginResponse = await axios.post(`http://${LOCALHOST}:4000/loginUser`, personData);
         
-        if (loginResponse.data.status === "ok") {
-          router.replace('/');
-        } else {
-          alert(loginResponse.data.message);
-        }
+      if (loginResponse.data.status === "ok") {
+        router.replace('/home');
+      } else {
+        alert(loginResponse.data.message);
+      }
     } catch (error) {
       alert("Error occurred: " + error.message);
     }
@@ -42,7 +82,7 @@ const SignIn = () => {
       <View className="top flex flex-col justify-center gap-2">
         <Text className="text-2xl font-manbold">Welcome Back</Text>
         <Text className="text-[#5C606A] text-base">
-          Please enter a form to login this app
+          Please enter your information to login
         </Text>
       </View>
       <View className="inputs my-8 flex flex-col">
@@ -100,9 +140,6 @@ const SignIn = () => {
             }
             onChangeText={(text) => setPassword(text)}
           />
-          <Link href="/" className="text-[#363C48] text-right mt-1">
-            Forgot Password
-          </Link>
         </View>
       </View>
       <Animated.View
@@ -128,27 +165,20 @@ const SignIn = () => {
       </Animated.View>
       <View className="w-full bg-[#EDEEF1] h-0.5 my-5 rounded-xl"></View>
       <TouchableOpacity
-            className="bg-white border border-[#C0C4CB] rounded-lg h-12 flex flex-row items-center justify-center"
-          >
-            <View className="flex flex-row items-center justify-center">
-              <Image
-                source={require("../../assets/images/google.png")}
-                resizeMode="contain"
-                className="w-4 h-4 mr-2 flex items-center justify-center"
-              />
-              <Link href='/google' className="text-base font-manbold mr-1 text-center text-[#2349CC]">
-                Sign In with Google
-              </Link>
-            </View>
-          </TouchableOpacity>
-      <View className="flex items-center justify-center mt-10 text-base">
-        <Text className="text-base text-[#5C606A] font-manmed">
-          Don’t have an account?{" "}
-          <Link className="text-base text-[#254EDB]" href="/register">
-            Register
-          </Link>
-        </Text>
-      </View>
+        onPress={() => promptAsync()}
+        className="bg-white border border-[#C0C4CB] rounded-lg h-12 flex flex-row items-center justify-center"
+      >
+        <View className="flex flex-row items-center justify-center">
+          <Image
+            source={require("../../assets/images/google.png")}
+            resizeMode="contain"
+            className="w-4 h-4 mr-2 flex items-center justify-center"
+          />
+          <Text className="text-base font-manbold text-[#2349CC]">
+            Sign In with Google
+          </Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
