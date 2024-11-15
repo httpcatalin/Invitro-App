@@ -7,7 +7,7 @@ exports.getAllDoctors = async (req, res) => {
     });
     
     const doctors = await axios.get(
-      `${process.env.INVITROAPI}/api/employees`,
+      `${process.env.API_URL}/api/employees`,
       { httpsAgent }
     );
 

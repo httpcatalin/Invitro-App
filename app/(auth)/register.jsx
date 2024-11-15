@@ -1,4 +1,4 @@
-import { View, Text, Animated,Image, Touchable } from "react-native";
+import { View, Text, Animated,Image, Touchable, Alert } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { TextInput, Button } from 'react-native-paper';
 import { Link, useRouter} from "expo-router";
@@ -10,9 +10,20 @@ const Register = () => {
     const animation = useRef(new Animated.Value(1)).current; 
     const router = useRouter();
 
+  const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+    const handleRegister = () => {
+        if (!emailRegex.test(text)) {
+            Alert.alert('Invalid Email', 'Please enter a valid email address.');
+            return;
+        }
+
+        router.replace('/otp');
+    }
+
     useEffect(() => {
       Animated.spring(animation, {
-        toValue: text ? 1.05 : 1,
+        toValue: emailRegex.test(text) ? 1.05 : 1,
         friction: 1,
         useNativeDriver: true,
       }).start();
@@ -65,14 +76,14 @@ const Register = () => {
                     className="buttons"
                 >
                     <TouchableOpacity
-                      onPress={()=> text ? router.replace('/otp') : null}
+                      onPress={handleRegister}
                         className={`${
-                            text ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
+                            emailRegex.test(text) ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
                         } rounded-lg h-12 inline-flex items-center justify-center`}
                     >
                         <Text
                             className={`text-base font-manbold ${
-                                text ? "text-white" : "text-[#CBCDD0]"
+                                emailRegex.test(text) ? "text-white" : "text-[#CBCDD0]"
                             }`}
                         >
                             Continue

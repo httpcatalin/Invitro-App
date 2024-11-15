@@ -2,15 +2,16 @@ import { View, Text, Animated, Image, TouchableOpacity   } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { TextInput, Button } from "react-native-paper";
 import { Link, useRouter } from "expo-router";
+import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const SignIn = () => {
-  const [text1, setText1] = useState("");
-  const [text2, setText2] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const animation = useRef(new Animated.Value(1)).current;
   const router = useRouter();
-  const isFormFilled = text1 && text2;
+  const isFormFilled = email && password;
 
   useEffect(() => {
     Animated.spring(animation, {
@@ -19,6 +20,22 @@ const SignIn = () => {
       useNativeDriver: true,
     }).start();
   }, [isFormFilled]);
+
+  const handleLogin = async () => {
+    const personData = { email, password };
+
+    try {
+      const loginResponse = await axios.post('http://10.0.2.2:4000/loginUser', personData);
+        
+        if (loginResponse.data.status === "ok") {
+          router.replace('/');
+        } else {
+          alert(loginResponse.data.message);
+        }
+    } catch (error) {
+      alert("Error occurred: " + error.message);
+    }
+  }
 
   return (
     <View className="h-screen bg-white p-5">
@@ -31,11 +48,11 @@ const SignIn = () => {
       <View className="inputs my-8 flex flex-col">
         <View className="flex gap-3">
           <Text className="font-manmed text-base text-[#111826] mb-1">
-            Email or Username
+            Email
           </Text>
           <TextInput
-            placeholder="Email or Username"
-            value={text1}
+            placeholder="email@example.com"
+            value={email}
             mode="outlined"
             textColor="#111826"
             className="bg-white overflow-hidden"
@@ -47,7 +64,7 @@ const SignIn = () => {
               },
               roundness: 12,
             }}
-            onChangeText={(text) => setText1(text)}
+            onChangeText={(text) => setEmail(text)}
           />
         </View>
         <View className="flex gap-3 mt-4">
@@ -56,7 +73,7 @@ const SignIn = () => {
           </Text>
           <TextInput
             placeholder="Password"
-            value={text2}
+            value={password}
             textColor="#111826"
             mode="outlined"
             secureTextEntry={!showPassword}
@@ -81,7 +98,7 @@ const SignIn = () => {
                 onPress={() => setShowPassword(!showPassword)}
               />
             }
-            onChangeText={(text) => setText2(text)}
+            onChangeText={(text) => setPassword(text)}
           />
           <Link href="/" className="text-[#363C48] text-right mt-1">
             Forgot Password
@@ -95,7 +112,7 @@ const SignIn = () => {
         className="buttons"
       >
         <TouchableOpacity
-    onPress={ ()=> (isFormFilled ? router.replace('/') : null)}
+          onPress={handleLogin}
           className={`${
             isFormFilled ? "bg-[#254EDB]" : "bg-[#EDEEF1]"
           } rounded-lg h-12 flex items-center justify-center`}
